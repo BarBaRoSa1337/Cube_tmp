@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 10:36:33 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/02 10:51:01 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:19:25 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ void	ft_cast_horz(t_cub3d *p, t_ray *ray, float ray_angl)
 	frst_x = p->ray->x_pos + (frst_y - p->ray->y_pos) / tan(ray->ray_angle);
 	ray->y_step = PXL;
 
-	if (ray->right_left = 1)
+	if (ray->up_dowm = 1)
 		ray->y_step *= -1;
 
 	ray->x_step = PXL / tan(ray->ray_angle);
 	if ((ray->right_left == -1 && ray->x_step > 0) ||
 			(ray->right_left == 1 && ray->x_step < 0))
 		ray->x_step *= -1;
-	ray->ver_x = frst_x;
-	ray->ver_y = frst_y;
+	ray->horz_x = frst_x;
+	ray->horz_y = frst_y;
 	while ((ray->hrz_x >= 0 && ray->hrz_x <= WIN_WIDTH) &&
 		(ray->hrz_y >= 0 && ray->hrz_y <= WIN_HIGHT))
 	{
@@ -72,14 +72,16 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 	frst_x = floor(p->ray->x_pos / PXL) * PXL;
 	if (ray->right_left == 1)
 		frst_x += PXL;
+		
 	frst_y = p->ray->y_pos + (frst_x - p->ray->x_pos) * tan(ray->ray_angle);
 	ray->x_step = PXL;
-	// if (ray->right_left = -1)
-	// 	ray->x_step *= -1;
-	// ray->y_step = PXL * tan(ray->ray_angle);
-	// if ((ray->up_dowm == 1 && ray->y_step > 0) ||
-	// 		(ray->up_dowm == -1 && ray->y_step < 0))
-	// 	ray->y_step *= -1;
+	if (ray->right_left = -1)
+		ray->x_step *= -1;
+		
+	ray->y_step = PXL * tan(ray->ray_angle);
+	if ((ray->up_dowm == 1 && ray->y_step > 0) ||
+			(ray->up_dowm == -1 && ray->y_step < 0))
+		ray->y_step *= -1;
 	ray->hrz_x = frst_x;
 	ray->hrz_y = frst_y;
 	while ((ray->hrz_x >= 0 && ray->hrz_x <= WIN_WIDTH) &&
