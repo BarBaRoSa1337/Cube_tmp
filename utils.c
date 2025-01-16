@@ -12,9 +12,6 @@
 
 #include "cub3d.h"
 
-//increment ray
-//ray_ang = FOV / N_RAYS;
-
 // double deg2rad(double deg)
 // {
 // 	return deg * (__pie__ / 180.0);
@@ -33,22 +30,27 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
+int check_wall(char **map ,float x, float y)
+{
+	if ((x > 0 && x < WIN_WIDTH) && (y > 0 && y < WIN_HIGHT))
+	{
+		if (map[floor(y / PXL)][floor(x / PXL)] == 1)
+			return (0);
+		return (1);
+	}
+	return (0)
+}
+
 void	put_images(t_cub3d *s)
 {
 	char	**map;
 	int		i;
 	size_t	j;
 
-	int grid_size = 50; // Size of each cell in pixels
-	int cell_x = 5;     // Column 5
-	int cell_y = 3;     // Row 3
-
 	// Calculate the dot's position
-	int x = cell_x * grid_size + (grid_size / 2);
-	int y = cell_y * grid_size + (grid_size / 2);
+	int x = s->wolf->x_pos * PXL + (PXL / 2);
+	int y = s->wolf->y_pos * PXL + (PXL / 2);
 
-	// Draw the dot
-	// my_mlx_pixel_put(&img, x, y, 0xffffff);
 	i = 0;
 	map = s->map;
 	put_pixels(s);
@@ -61,13 +63,12 @@ void	put_images(t_cub3d *s)
 				mlx_put_image_to_window(s->mlx, s->mlx_win, s->flour->img, (j * PXL), (i * PXL));
 			else if (map[i][j] == '1')
 				mlx_put_image_to_window(s->mlx, s->mlx_win, s->wall->img ,(j * PXL), (i * PXL));
-			// else if (map[i][j] == 'P')
-			// {
-			// 	my_mlx_pixel_put(s->flour, x - 1, y - 1 , 0x0000FF00);
-			// 	my_mlx_pixel_put(s->flour, x, y , 0x0000FF00);
-			// 	mlx_put_image_to_window(s->mlx, s->mlx_win, s->flour->img ,(j * PXL), (i * PXL));
-			// 	// put_pixels(s);
-			// }
+			else if (map[i][j] == 'P')
+			{
+				my_mlx_pixel_put(&s->flour->img, x, y, 0xffffff);
+				mlx_put_image_to_window(s->mlx, s->mlx_win, s->flour->img ,(j * PXL), (i * PXL));
+				put_pixels(s);
+			}
 			++j;
 		}
 		++i;

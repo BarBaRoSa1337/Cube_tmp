@@ -13,7 +13,7 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
-# include "./minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -27,6 +27,7 @@
 #define N_RAYS = WIN_WIDHT / 4
 #define WIN_HIGHT
 #define FOV  60 * (PIE / 180.0)
+
 
 typedef struct	s_data {
 	void	*img;
@@ -52,14 +53,13 @@ typedef struct s_ray {
 typedef struct s_player
 {
 	char	**map;
-	int		ray_angle;
 	int		x_pos;
 	int		y_pos;
-    int     face;
-    int     walk;
-    float   rotat;
+    int     up_down;
+    int   right_left;
     float   move_speed;
-    float   rotat_speed;
+    float   rotat_angle;
+	float turn_speed;
 } t_player;
 
 typedef struct s_cub3d
@@ -84,6 +84,7 @@ void	ft_strlcpy(char *dst, char *src, size_t dstsize);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 char	*ft_strdup(char *str);
 void	put_pixels(t_cub3d	*p);
+int check_wall(char **map ,float x, float y);
 void	put_images(t_cub3d *s);
 char	**ft_split(char const *s, char c);
 char	**get_map(int fd);
