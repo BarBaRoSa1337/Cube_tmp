@@ -75,6 +75,24 @@ void	put_images(t_cub3d *s)
 	}
 }
 
+int	select_move(int keycode, t_cub3d *p)
+{
+	t_player	*plr;
+
+	if (keycode == ESC || keycode == Q)
+		ft_exit(p);
+	plr = p->wolf;
+	if (keycode == UP)
+		plr->up_down = 1;
+	else if (keycode == DOWN)
+		plr->up_down = -1;
+	else if ((keycode == RIGHT))
+		plr->right_left = 1;
+	else if ((keycode == LEFT))
+		plr->right_left = -1;
+	return (1);
+}
+
 void	put_pixels(t_cub3d	*p)
 {
 	int	j;
@@ -94,6 +112,20 @@ void	put_pixels(t_cub3d	*p)
 		while (++j < PXL)
 			my_mlx_pixel_put(p->flour, i , j , 808080);
 	}
+}
+
+void	init_win(t_cub3d *p)
+{
+	p->flour = (t_data *)malloc(sizeof(t_data));
+	p->wall = (t_data *)malloc(sizeof(t_data));
+	p->mlx_win = mlx_new_window(p->mlx, (39 * PXL), (16 * PXL),
+			"cub3d");
+	p->flour->img = mlx_new_image(p->mlx, PXL, PXL);
+	p->wall->img = mlx_new_image(p->mlx, PXL, PXL);
+	p->flour->addr = mlx_get_data_addr(p->flour->img, &p->flour->bits_per_pixel, &p->flour->line_length,
+								&p->flour->endian);
+	p->wall->addr = mlx_get_data_addr( p->wall->img, &p->wall->bits_per_pixel, &p->wall->line_length,
+								&p->wall->endian);
 }
 
 char	**get_map(int fd)

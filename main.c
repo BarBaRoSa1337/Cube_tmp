@@ -18,7 +18,7 @@ void	init_player(t_player *p)
 	p->move_speed = 100;
 	p->up_down = 1;
 	p->right_left = 1;
-	
+
 	if (p->up_down = 1)
 		p->rotat_angle = 90;
 	else if (p->up_down == -1)
@@ -27,28 +27,6 @@ void	init_player(t_player *p)
 		p->rotat_angle = 90 * 2
 	else if (p->right_left == 1)
 		p->rotat_angle = 0;
-}
-
-void	put_win(t_cub3d *p)
-{
-    int	fd;
-
-	p->mlx = mlx_init();
-	fd = open("map.txt", O_RDONLY);
-    p->map = get_map(fd);
-	p->flour = (t_data *)malloc(sizeof(t_data));
-	p->wall = (t_data *)malloc(sizeof(t_data));
-	p->mlx_win = mlx_new_window(p->mlx, (39 * PXL), (16 * PXL),
-			"cub3d");
-	p->flour->img = mlx_new_image(p->mlx, PXL, PXL);
-	p->wall->img = mlx_new_image(p->mlx, PXL, PXL);
-	p->flour->addr = mlx_get_data_addr(p->flour->img, &p->flour->bits_per_pixel, &p->flour->line_length,
-								&p->flour->endian);
-	p->wall->addr = mlx_get_data_addr( p->wall->img, &p->wall->bits_per_pixel, &p->wall->line_length,
-								&p->wall->endian);
-	put_images(p);
-	move_player(p->wolf);
-	mlx_loop(p->mlx);
 }
 
 void	move_player(t_player *p)
@@ -68,6 +46,19 @@ void	move_player(t_player *p)
 		p->x_pos = x;
 		p->y_pos = y;
 	}
+	printf("player pos: %f %f\n", p->x_pos,p->y_pos);
+}
+
+void	plug_play(t_cub3d *p)
+{
+	p->mlx = mlx_init();
+    p->map = get_map(open("map.txt", O_RDONLY));
+	init_win(p);
+	put_images(p);
+	mlx_hook(p->mlx_win, 2, 1L << 0, select_move, p);
+	// mlx_hook(p->mlx_win, 17, 0, ft_exit, p);
+	move_player(p->wolf);
+	mlx_loop(p->mlx);
 }
 
 int main()
@@ -79,6 +70,6 @@ int main()
 	player = malloc(sizeof(t_player));
 	init_player(player);
 	p->wolf = player;
-	put_win(p);
+	plug_play(p);
 	return (0);
 }

@@ -20,6 +20,12 @@
 #include <fcntl.h>
 #include <math.h>
 
+# define UP 119
+# define DOWN 115
+# define RIGHT 100
+# define LEFT 97
+# define ESC 65307
+# define Q 113
 #define BUFFER_SIZE 13
 #define PXL 40
 #define WIN_WIDTH 300
@@ -86,6 +92,8 @@ char	*ft_strdup(char *str);
 void	put_pixels(t_cub3d	*p);
 int check_wall(char **map ,float x, float y);
 void	put_images(t_cub3d *s);
+int	select_move(int keycode, t_cub3d *p);
+void	init_win(t_cub3d *p);
 char	**ft_split(char const *s, char c);
 char	**get_map(int fd);
 int	    ft_strlen(const char *s);
