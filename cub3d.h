@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:24 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/02 10:10:02 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/17 09:42:32 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@
 #define PXL 40
 #define WIN_WIDTH 300
 #define PI 3.14159
-#define N_RAYS = WIN_WIDHT / 4
-#define WIN_HIGHT
-#define FOV  60 * (PIE / 180.0)
+#define WIN_HIGHT 300
+#define N_RAYS (WIN_WIDHT / 4)
+#define FOV (60 * (PIE / 180.0))
 
 
 typedef struct	s_data {
@@ -95,6 +95,7 @@ void	put_images(t_cub3d *s);
 int	select_move(int keycode, t_cub3d *p);
 void	init_win(t_cub3d *p);
 char	**ft_split(char const *s, char c);
+void	ft_exit(t_cub3d *p);
 char	**get_map(int fd);
 int	    ft_strlen(const char *s);
 char	*ft_strjoin(char *s1, char *s2);

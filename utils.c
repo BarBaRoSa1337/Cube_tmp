@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:30 by achakour          #+#    #+#             */
-/*   Updated: 2024/11/23 11:54:15 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/17 09:49:13 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ int check_wall(char **map ,float x, float y)
 {
 	if ((x > 0 && x < WIN_WIDTH) && (y > 0 && y < WIN_HIGHT))
 	{
-		if (map[floor(y / PXL)][floor(x / PXL)] == 1)
+		if (map[(int)floor(y / PXL)][(int)floor(x / PXL)] == 1)
 			return (0);
 		return (1);
 	}
-	return (0)
+	return (0);
 }
 
 void	put_images(t_cub3d *s)
@@ -65,14 +65,19 @@ void	put_images(t_cub3d *s)
 				mlx_put_image_to_window(s->mlx, s->mlx_win, s->wall->img ,(j * PXL), (i * PXL));
 			else if (map[i][j] == 'P')
 			{
-				my_mlx_pixel_put(&s->flour->img, x, y, 0xffffff);
+				// my_mlx_pixel_put(s->flour->img, 25, 25, 0xffffff);
 				mlx_put_image_to_window(s->mlx, s->mlx_win, s->flour->img ,(j * PXL), (i * PXL));
-				put_pixels(s);
+				// put_pixels(s);
 			}
 			++j;
 		}
 		++i;
 	}
+}
+
+void	ft_exit(t_cub3d *p)
+{
+	exit(0);
 }
 
 int	select_move(int keycode, t_cub3d *p)
@@ -86,9 +91,9 @@ int	select_move(int keycode, t_cub3d *p)
 		plr->up_down = 1;
 	else if (keycode == DOWN)
 		plr->up_down = -1;
-	else if ((keycode == RIGHT))
+	else if (keycode == RIGHT)
 		plr->right_left = 1;
-	else if ((keycode == LEFT))
+	else if (keycode == LEFT)
 		plr->right_left = -1;
 	return (1);
 }

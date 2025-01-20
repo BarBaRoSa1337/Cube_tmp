@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:27 by achakour          #+#    #+#             */
-/*   Updated: 2024/12/30 10:37:08 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/17 09:44:45 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ void	init_player(t_player *p)
 	p->up_down = 1;
 	p->right_left = 1;
 
-	if (p->up_down = 1)
+	if (p->up_down == 1)
 		p->rotat_angle = 90;
 	else if (p->up_down == -1)
 		p->rotat_angle = 90 * 3;
 	else if (p->right_left == -1)
-		p->rotat_angle = 90 * 2
+		p->rotat_angle = 90 * 2;
 	else if (p->right_left == 1)
 		p->rotat_angle = 0;
 }
@@ -41,12 +41,12 @@ void	move_player(t_player *p)
 	x = p->x_pos + cos(p->rotat_angle) * move_step;
 	y = p->y_pos + sin(p->rotat_angle) * move_step;
 
-	if (check_wall(x, y))
+	if (check_wall(p->map, x, y))
 	{
 		p->x_pos = x;
 		p->y_pos = y;
 	}
-	printf("player pos: %f %f\n", p->x_pos,p->y_pos);
+	// printf("player pos: %f %f\n", p->x_pos,p->y_pos);
 }
 
 void	plug_play(t_cub3d *p)
@@ -56,7 +56,7 @@ void	plug_play(t_cub3d *p)
 	init_win(p);
 	put_images(p);
 	mlx_hook(p->mlx_win, 2, 1L << 0, select_move, p);
-	// mlx_hook(p->mlx_win, 17, 0, ft_exit, p);
+	mlx_hook(p->mlx_win, 17, 0, ft_exit, p);
 	move_player(p->wolf);
 	mlx_loop(p->mlx);
 }

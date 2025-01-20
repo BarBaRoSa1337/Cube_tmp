@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 10:36:33 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/15 13:19:25 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:26:07 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,19 +82,17 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 	if ((ray->up_dowm == 1 && ray->y_step > 0) ||
 			(ray->up_dowm == -1 && ray->y_step < 0))
 		ray->y_step *= -1;
-	ray->hrz_x = frst_x;
-	ray->hrz_y = frst_y;
-	while ((ray->hrz_x >= 0 && ray->hrz_x <= WIN_WIDTH) &&
-		(ray->hrz_y >= 0 && ray->hrz_y <= WIN_HIGHT))
+	ray->ver_x = frst_x;
+	ray->ver_y = frst_y;
+	while ((ray->ver_x >= 0 && ray->ver_x <= WIN_WIDTH) &&
+		(ray->ver_y >= 0 && ray->ver_y <= WIN_HIGHT))
 	{
-		if (map[floor(ray->hrz_y / PXL)][floor(ray->hrz_x / PXL) + 1] == '1')
-		{
+		if (map[floor(ray->ver_y / PXL)][floor(ray->ver_x / PXL) + 1] == '1')
 			break;
-		}
 		else
 		{
-			ray->hrz_x += ray->x_step;
-			ray->hrz_y += ray->y_step;
+			ray->ver_x += ray->x_step;
+			ray->ver_y += ray->y_step;
 		}
 	}
 }
@@ -118,9 +116,9 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 
 void	ft_caster(t_cub3d *p)
 {
+	int		i;
 	t_ray	*rays;
 	float	ray_angle;
-	int		i;
 
 	i = 0;
 	ray_angle = p->wolf->ray_angle - (FOV / 2);
