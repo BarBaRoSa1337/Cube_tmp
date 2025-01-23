@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:24 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/17 09:42:32 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:33:32 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@
 #define WIN_WIDTH 300
 #define PI 3.14159
 #define WIN_HIGHT 300
-#define N_RAYS (WIN_WIDHT / 4)
 #define FOV (60 * (PIE / 180.0))
-
 
 typedef struct	s_data {
 	void	*img;
@@ -56,6 +54,24 @@ typedef struct s_ray {
 	float	y_step;
 }	t_ray;
 
+typedef struct s_player t_player;
+
+typedef struct s_cub3d
+{
+	t_data	*wall;
+	t_data	*flour;
+	t_ray	*rays;
+	t_player	*player;
+    char	**map;
+	int		n_rays;
+	int		win_width;
+	int		win_height;
+	void	*mlx;
+	void	*mlx_win;
+	void	*win;
+	int		fd;
+}   t_cub3d;
+
 typedef struct s_player
 {
 	char	**map;
@@ -66,38 +82,23 @@ typedef struct s_player
     float   move_speed;
     float   rotat_angle;
 	float turn_speed;
+	t_cub3d	*parent;
 } t_player;
 
-typedef struct s_cub3d
-{
-	t_data	*wall;
-	t_data	*flour;
-	t_ray	*rays;
-	t_player	*wolf;
-    int     height;
-    char	**map;
-	int		img_w;
-	int		img_h;
-    int     wide;
-	void	*mlx;
-	void	*mlx_win;
-	void	*win;
-	int		fd;
-}   t_cub3d;
-
-
+void	update_window(t_cub3d *p);
 void	ft_strlcpy(char *dst, char *src, size_t dstsize);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 char	*ft_strdup(char *str);
 void	put_pixels(t_cub3d	*p);
-int check_wall(char **map ,float x, float y);
+int		check_wall(char **map ,float x, float y);
 void	put_images(t_cub3d *s);
-int	select_move(int keycode, t_cub3d *p);
+int		select_move(int keycode, t_cub3d *p);
 void	init_win(t_cub3d *p);
 char	**ft_split(char const *s, char c);
-void	ft_exit(t_cub3d *p);
+void	*ft_exit(t_cub3d *p);
 char	**get_map(int fd);
 int	    ft_strlen(const char *s);
+void	init_player(t_cub3d *strct, t_player *p);
 char	*ft_strjoin(char *s1, char *s2);
 char	*get_next_line(int fd);
 

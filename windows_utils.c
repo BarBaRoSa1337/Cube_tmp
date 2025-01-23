@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   windows_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:30 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/17 09:49:13 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/23 09:51:36 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,74 +30,6 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-int check_wall(char **map ,float x, float y)
-{
-	if ((x > 0 && x < WIN_WIDTH) && (y > 0 && y < WIN_HIGHT))
-	{
-		if (map[(int)floor(y / PXL)][(int)floor(x / PXL)] == 1)
-			return (0);
-		return (1);
-	}
-	return (0);
-}
-
-void	put_images(t_cub3d *s)
-{
-	char	**map;
-	int		i;
-	size_t	j;
-
-	// Calculate the dot's position
-	int x = s->wolf->x_pos * PXL + (PXL / 2);
-	int y = s->wolf->y_pos * PXL + (PXL / 2);
-
-	i = 0;
-	map = s->map;
-	put_pixels(s);
-	while (i < 16)
-	{
-		j = 0;
-		while (j < ft_strlen(map[i]))
-		{
-			if (map[i][j] == '0')
-				mlx_put_image_to_window(s->mlx, s->mlx_win, s->flour->img, (j * PXL), (i * PXL));
-			else if (map[i][j] == '1')
-				mlx_put_image_to_window(s->mlx, s->mlx_win, s->wall->img ,(j * PXL), (i * PXL));
-			else if (map[i][j] == 'P')
-			{
-				// my_mlx_pixel_put(s->flour->img, 25, 25, 0xffffff);
-				mlx_put_image_to_window(s->mlx, s->mlx_win, s->flour->img ,(j * PXL), (i * PXL));
-				// put_pixels(s);
-			}
-			++j;
-		}
-		++i;
-	}
-}
-
-void	ft_exit(t_cub3d *p)
-{
-	exit(0);
-}
-
-int	select_move(int keycode, t_cub3d *p)
-{
-	t_player	*plr;
-
-	if (keycode == ESC || keycode == Q)
-		ft_exit(p);
-	plr = p->wolf;
-	if (keycode == UP)
-		plr->up_down = 1;
-	else if (keycode == DOWN)
-		plr->up_down = -1;
-	else if (keycode == RIGHT)
-		plr->right_left = 1;
-	else if (keycode == LEFT)
-		plr->right_left = -1;
-	return (1);
-}
-
 void	put_pixels(t_cub3d	*p)
 {
 	int	j;
@@ -119,6 +51,69 @@ void	put_pixels(t_cub3d	*p)
 	}
 }
 
+void	draw_player(t_cub3d *p)
+{
+	my_mlx_pixel_put(p->flour, 20, 20, 0x0000FF00);
+	mlx_put_image_to_window(p->mlx, p->mlx_win, p->flour->img , (int)floor(p->player->x_pos / PXL), (int)floor(p->player->y_pos / PXL));
+}
+
+void	put_images(t_cub3d *s)
+{
+	char	**map;
+	int		i;
+	size_t	j;
+	
+	i = 0;
+	map = s->map;
+	put_pixels(s);
+	while (i < 16)
+	{
+		j = 0;
+		while (j < ft_strlen(map[i]))
+		{
+			if (map[i][j] == '0')
+				mlx_put_image_to_window(s->mlx, s->mlx_win, s->flour->img, (j * PXL), (i * PXL));
+			else if (map[i][j] == '1')
+				mlx_put_image_to_window(s->mlx, s->mlx_win, s->wall->img ,(j * PXL), (i * PXL));
+			// else if (map[i][j] == 'P')
+			// 	map[i][j] = '0';
+			++j;
+		}
+		++i;
+	}
+	draw_player(s);
+}
+
+void	update_window(t_cub3d *p)
+{
+	char	**map;
+	int		i;
+	size_t	j;
+
+	i = 0;
+	map = p->map;
+	put_pixels(p);
+	while (i < 16)
+	{
+		j = 0;
+		while (j < ft_strlen(map[i]))
+		{
+			if (map[i][j] == '0' || map[i][j] == 'P')
+				mlx_put_image_to_window(p->mlx, p->mlx_win, p->flour->img, (j * PXL), (i * PXL));
+			else if (map[i][j] == '1')
+				mlx_put_image_to_window(p->mlx, p->mlx_win, p->wall->img ,(j * PXL), (i * PXL));
+			++j;
+		}
+		++i;
+	}
+	draw_player(p);
+}
+
+void	*ft_exit(t_cub3d *p)
+{
+	exit(0);
+}
+
 void	init_win(t_cub3d *p)
 {
 	p->flour = (t_data *)malloc(sizeof(t_data));
@@ -131,6 +126,7 @@ void	init_win(t_cub3d *p)
 								&p->flour->endian);
 	p->wall->addr = mlx_get_data_addr( p->wall->img, &p->wall->bits_per_pixel, &p->wall->line_length,
 								&p->wall->endian);
+	put_images(p);
 }
 
 char	**get_map(int fd)

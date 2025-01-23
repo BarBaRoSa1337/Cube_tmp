@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 10:36:33 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/15 17:26:07 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/22 09:51:10 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 	}
 }
 
-// void	ft_get_distance(t_ray *p)
+// void	get_distance(t_ray *p)
 // {
 // 	float	horz_dst;
 // 	float	vert_dst;
@@ -121,14 +121,15 @@ void	ft_caster(t_cub3d *p)
 	float	ray_angle;
 
 	i = 0;
+	p->n_rays = p->win_width / 4;
 	ray_angle = p->wolf->ray_angle - (FOV / 2);
-	p->rays = malloc(sizeof(t_ray) * N_RAYS);
-	while (i < N_RAYS)
+	p->rays = malloc(sizeof(t_ray) * p->n_rays);
+	while (i < p->n_rays)
 	{
 		ft_cast_horzn(p, p->rays[i], ray_angle);
         ft_cast_vert(p, p->rays[i], ray_angle);
-		ft_get_distance(p->rays[i]);
-		ray_angle += FOV / N_RAYS;
+		get_distance(p->rays[i]);
+		ray_angle += FOV / p->n_rays;
 		++i;
 	}
 }
