@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:10:48 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/24 10:42:56 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/24 11:19:54 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 void	init_player(t_cub3d *strct, t_player *p)
 {
+	p->rotat_angle = PI / 2;
 	p->turn_speed = 45 * (PI / 2);
 	p->move_speed = 10;
-	p->up_down = 1;
+	p->up_down = 0;
 	p->right_left = 0;
 	p->parent = strct;
 	p->x_pos =  1 * PXL + (PXL / 2);
@@ -45,6 +46,9 @@ void	move_player(t_player *p)
 	float	x;
 	float	y;
 
+	p->rotat_angle = remainder(p->rotat_angle, 2 * PI);
+    if (p->rotat_angle < 0)
+        p->rotat_angle += 2 * PI;
 	p->rotat_angle += p->right_left * p->turn_speed;
 	move_step = p->up_down * p->move_speed;
 
@@ -60,21 +64,20 @@ void	move_player(t_player *p)
 
 int	select_move(int keycode, t_cub3d *p)
 {
-	t_player	*plr;
-
 	if (keycode == ESC || keycode == Q)
 		ft_exit(p);
-	plr = p->player;
-	if (keycode == UP)
-		plr->up_down = 1;
-	else if (keycode == DOWN)
-		plr->up_down = -1;
-	else if (keycode == RIGHT)
-		plr->right_left = 1;
-	else if (keycode == LEFT)
-		plr->right_left = -1;
+	if (keycode == UP || keycode == 65362)
+		p->player->up_down = 1;
+	else if (keycode == DOWN || keycode == 65364)
+		p->player->up_down = -1;
+	else if (keycode == RIGHT || keycode == 65363)
+		p->player->right_left = 1;
+	else if (keycode == LEFT || keycode == 65361)
+		p->player->right_left = -1;
 	move_player(p->player);
 	update_window(p);
+	p->player->up_down = 0;
+	p->player->right_left = 0;
 	// ft_caster();
 	return (1);
 }

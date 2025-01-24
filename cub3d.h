@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:24 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/23 11:25:59 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/24 11:15:38 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_player
 	t_cub3d	*parent;
 } t_player;
 
+float	calc_direction(float angl, t_ray *ray);
 void	update_window(t_cub3d *p);
 void	ft_strlcpy(char *dst, char *src, size_t dstsize);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);

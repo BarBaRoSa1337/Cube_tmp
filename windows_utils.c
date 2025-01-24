@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:30 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/24 10:44:56 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/24 10:55:18 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	draw_rect(t_data *img, float x, float y, char c)
 	}
 }
 
-void DDA(int X0, int Y0, int X1, int Y1) 
+void DDA(t_data *p, int X0, int Y0, int X1, int Y1) 
 { 
     // calculate dx & dy 
     int dx = X1 - X0; 
@@ -106,14 +106,12 @@ void DDA(int X0, int Y0, int X1, int Y1)
     float X = X0; 
     float Y = Y0; 
     for (int i = 0; i <= steps; i++) { 
-        my_mlx_pixel_put(round(X), round(Y), 
-                 RED); // put pixel at (X,Y) 
+        my_mlx_pixel_put(p ,(int)round(X), (int)round(Y), 
+                 0xFAFAFA); // put pixel at (X,Y) 
         X += Xinc; // increment in x at each step 
         Y += Yinc; // increment in y at each step 
-        delay(100); // for visualization of line- 
-                    // generation step by step 
     } 
-} 
+}
 
 void	draw_player(t_cub3d *s)
 {
@@ -164,5 +162,5 @@ void	update_window(t_cub3d *p)
 	y = p->player->y_pos;
 	mlx_clear_window(p->mlx, p->mlx_win);
 	put_images(p);
-	DDA(x, y, x + cos(p->player->rotat_angl), sin(p->player->));
+	// DDA(p->img, x, y, x + cos(p->player->rotat_angle) * 40, y + sin(p->player->rotat_angle) * 40);
 }
