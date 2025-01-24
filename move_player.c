@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:10:48 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/23 09:52:09 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/24 10:42:56 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	init_player(t_cub3d *strct, t_player *p)
 	p->turn_speed = 45 * (PI / 2);
 	p->move_speed = 10;
 	p->up_down = 1;
-	p->right_left = 1;
+	p->right_left = 0;
 	p->parent = strct;
 	p->x_pos =  1 * PXL + (PXL / 2);
 	p->y_pos = 1 * PXL + (PXL / 2);
@@ -25,13 +25,18 @@ void	init_player(t_cub3d *strct, t_player *p)
 
 int check_wall(char **map ,float x, float y)
 {
-	if ((x > 0 && x < WIN_WIDTH) && (y > 0 && y < WIN_HIGHT))
-	{
-		if (map[(int)floor(y / PXL)][(int)floor(x / PXL)] == 1)
+	// if ((x > 0 && x < WIN_WIDTH) && (y > 0 && y < WIN_HIGHT))
+	// {
+		if (map[(int)floor(x / PXL)][(int)floor(y / PXL)] == '1')
+		{
+			// printf("ENterd y = %d x = %d map %c\n", (int)floor(y / PXL), (int)floor(x / PXL), map[(int)floor(x / PXL)][(int)floor(y / PXL)]);
+			// printf("ENterd\n");//(int)floor(y / PXL), (int)floor(x / PXL)
 			return (0);
+		}
+		// printf("NOT ENterd y = %d x = %d map %c\n", (int)floor(y / PXL), (int)floor(x / PXL), map[(int)floor(x / PXL)][(int)floor(y / PXL)]);
 		return (1);
-	}
-	return (0);
+	// }
+	// return (0);
 }
 
 void	move_player(t_player *p)
@@ -69,7 +74,6 @@ int	select_move(int keycode, t_cub3d *p)
 	else if (keycode == LEFT)
 		plr->right_left = -1;
 	move_player(p->player);
-	mlx_clear_window(p->mlx, p->mlx_win);
 	update_window(p);
 	// ft_caster();
 	return (1);

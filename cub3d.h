@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:24 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/22 12:33:32 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:25:59 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ typedef struct s_player t_player;
 
 typedef struct s_cub3d
 {
-	t_data	*wall;
-	t_data	*flour;
+	t_data	*img;
 	t_ray	*rays;
 	t_player	*player;
     char	**map;
@@ -75,8 +74,8 @@ typedef struct s_cub3d
 typedef struct s_player
 {
 	char	**map;
-	int		x_pos;
-	int		y_pos;
+	float		x_pos;
+	float		y_pos;
     int     up_down;
     int   right_left;
     float   move_speed;

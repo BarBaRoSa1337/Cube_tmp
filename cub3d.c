@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:27 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/23 09:46:46 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:48:30 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void	plug_play(t_cub3d *p)
 {
 	p->mlx = mlx_init();
     p->map = get_map(open("map.txt", O_RDONLY));
-	// printf("map[1] = %s\n", p->map[1]);
-	// printf("map[1][1] = %c\n", p->map[1][1]);
 	p->player->map = p->map;
 	init_win(p);
 	mlx_hook(p->mlx_win, 2, 1L << 0, select_move, p);
