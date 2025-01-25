@@ -3,7 +3,7 @@ SRCS	= cub3d.c ./get_next_line/get_next_line_utils.c ./get_next_line/get_next_li
 
 OBJ = $(SRCS:.c=.o)
 
-CFLAGS =#-Wall -Wextra -Werror
+CFLAGS = -g #-Wall -Wextra -Werror 
 NAME = cub3d
 RM = rm -f
 CC = cc

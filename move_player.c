@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:10:48 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/24 11:19:54 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/25 10:11:17 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,13 @@ void	move_player(t_player *p)
 	}
 }
 
+int	game_loop(t_cub3d *p)
+{
+	move_player(p->player);
+	update_window(p);
+	return (1);
+}
+
 int	select_move(int keycode, t_cub3d *p)
 {
 	if (keycode == ESC || keycode == Q)
@@ -74,10 +81,12 @@ int	select_move(int keycode, t_cub3d *p)
 		p->player->right_left = 1;
 	else if (keycode == LEFT || keycode == 65361)
 		p->player->right_left = -1;
-	move_player(p->player);
-	update_window(p);
-	p->player->up_down = 0;
-	p->player->right_left = 0;
-	// ft_caster();
+	// game_loop(p);
 	return (1);
+}
+
+int	release_key(t_cub3d *p)
+{
+	p->player->right_left = 0;
+	p->player->up_down = 0;
 }

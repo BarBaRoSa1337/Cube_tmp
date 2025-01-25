@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:27 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/23 11:48:30 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/25 10:09:02 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ void	plug_play(t_cub3d *p)
     p->map = get_map(open("map.txt", O_RDONLY));
 	p->player->map = p->map;
 	init_win(p);
-	mlx_hook(p->mlx_win, 2, 1L << 0, select_move, p);
-	mlx_hook(p->mlx_win, 17, 0, ft_exit, p);
+	mlx_hook(p->mlx_win, 2, 1L << 0, select_move, p);  // Key press
+    mlx_loop_hook(p->mlx, game_loop, p);              // Game loop
+    mlx_hook(p->mlx_win, 17, 0, ft_exit, p);          // Window close
+    // mlx_hook(p->mlx_win, 3, 1L << 1, release_key, p); // Key release
 	mlx_loop(p->mlx);
 }
 
