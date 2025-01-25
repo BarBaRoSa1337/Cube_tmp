@@ -6,11 +6,14 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 10:36:33 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/22 09:51:10 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/25 10:34:56 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+
+
 
 float	calc_direction(float angl, t_ray *ray)
 {
