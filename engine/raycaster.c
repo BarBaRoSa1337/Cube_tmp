@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 float	calc_direction(float angl, t_ray *ray)
 {
@@ -32,6 +32,8 @@ void	ft_cast_horz(t_cub3d *p, t_ray *ray, float ray_angl)
 {
 	float	frst_x;
 	float	frst_y;
+	float	next_x;
+	float	next_y;
 
 	frst_x = 0;
 	frst_y = 0;
@@ -50,17 +52,22 @@ void	ft_cast_horz(t_cub3d *p, t_ray *ray, float ray_angl)
 	if ((ray->right_left == -1 && ray->x_step > 0) ||
 			(ray->right_left == 1 && ray->x_step < 0))
 		ray->x_step *= -1;
-	ray->hrz_x = frst_x;
-	ray->hrz_y = frst_y;
-	while ((ray->hrz_x >= 0 && ray->hrz_x <= WIN_WIDTH) &&
-		(ray->hrz_y >= 0 && ray->hrz_y <= WIN_HIGHT))
+	next_x = frst_x;
+	next_y= frst_y;
+	while ((next_x >= 0 && next_x <= WIN_WIDTH) &&
+		(next_y >= 0 && next_y <= WIN_HIGHT))
 	{
-		if (p->map[(int)floor(ray->hrz_y / PXL)][(int)floor(ray->hrz_x / PXL) + 1] == '1')
+		if (p->map[(int)floor(next_y / PXL)][(int)floor(next_x / PXL) + 1] == '1')
+		{
+			ray->hrz_x = ray->x_step;
+			ray->hrz_y = ray->y_step;
+			ray->found_hrz = 1;
 			break;
+		}
 		else
 		{
-			ray->hrz_x += ray->x_step;
-			ray->hrz_y += ray->y_step;
+			next_x += ray->x_step;
+			next_y += ray->y_step;
 		}
 	} 
 }
@@ -69,6 +76,8 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 {
 	float	frst_x;
 	float	frst_y;
+	float	next_x;
+	float	next_y;
 
 	frst_x = 0;
 	frst_y = 0;
@@ -86,39 +95,53 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 	if ((ray->up_dowm == 1 && ray->y_step > 0) ||
 			(ray->up_dowm == -1 && ray->y_step < 0))
 		ray->y_step *= -1;
-	ray->ver_x = frst_x;
-	ray->ver_y = frst_y;
-	while ((ray->ver_x >= 0 && ray->ver_x <= WIN_WIDTH) &&
-		(ray->ver_y >= 0 && ray->ver_y <= WIN_HIGHT))
+	next_x = frst_x;
+	next_y= frst_y;
+	while ((next_x >= 0 && next_x <= WIN_WIDTH) &&
+		(next_y >= 0 && next_y <= WIN_HIGHT))
 	{
-		if (p->map[(int)floor(ray->ver_y / PXL)][(int)floor(ray->ver_x / PXL) + 1] == '1')
+		if (p->map[(int)floor(next_y / PXL)][(int)floor(next_x / PXL) + 1] == '1')
+		{
+			ray->ver_x = ray->x_step;
+			ray->ver_y = ray->y_step;
+			// ray->found_vrt = 1;
 			break;
+		}
 		else
 		{
-			ray->ver_x += ray->x_step;
-			ray->ver_y += ray->y_step;
+			next_x += ray->x_step;
+			next_y += ray->y_step;
 		}
-	}
+	} 
 }
 
-// void	get_distance(t_ray *p)
-// {
-// 	float	horz_dst;
-// 	float	vert_dst;
+void	get_distance(t_ray *p)
+{
+	float	horz_dst;
+	float	vert_dst;
 
-// 	printf("X = %f\n", p->hrz_x);
-// 	printf("Y = %f\n", p->hrz_y);
-	// horz_dst = sqrt((x1 - x2)(x1 - x2) * (y1 - y2)(y1 - y2));
-	// vert_dst = sqrt((x1 - x2)(x1 - x2) * (y1 - y2)(y1 - y2));
-	// if (horz_dst < vert_dst)
-	// {
-		
-	// }
-	// else
-	// {
-		
-	// }
-// }
+	if (p->found_hrz)
+		horz_dst = calc_dist(p->, p->hrz_x, p->, p->hrz_y);
+	else if (p->found_vrt)
+		vert_dst = calc_dist(p-> , p->ver_x, p-> , p->ver_y);
+	if (p->ver_x < p->hrz_x)
+		p->x_step = p->ver_x;
+	else
+		p->x_step = p->hrz_x;
+	if (p->ver_y < p->hrz_y)
+		p->y_step = p->ver_y;
+	else
+		p->y_step = p->hrz_y;
+	if (horz_dst < vert_dst)
+	{
+		p->distance = horz_dst;
+	}
+	else
+	{
+		p->distance = vert_dst;
+	}
+	DDA(, player_x, player_y, p->x_step, p->y_step);
+}
 
 void	ft_caster(t_cub3d *p)
 {
