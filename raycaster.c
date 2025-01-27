@@ -6,14 +6,11 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 10:36:33 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/25 10:34:56 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/27 12:11:15 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-
-
 
 float	calc_direction(float angl, t_ray *ray)
 {
@@ -36,34 +33,36 @@ void	ft_cast_horz(t_cub3d *p, t_ray *ray, float ray_angl)
 	float	frst_x;
 	float	frst_y;
 
-	ray_angl = calc_direction(ray_angl, ray);
-	frst_y = floor(p->ray->y_pos / PXL) * PXL;
+	frst_x = 0;
+	frst_y = 0;
+	ray->ray_angle = calc_direction(ray_angl, ray);
+	frst_y = floor(p->player->y_pos / PXL) * PXL;
 	if (ray->up_dowm == -1)
 		frst_y += PXL;// (y = i) in the map representation
 
-	frst_x = p->ray->x_pos + (frst_y - p->ray->y_pos) / tan(ray->ray_angle);
+	frst_x = p->player->x_pos + (frst_y - p->player->y_pos) / tan(ray->ray_angle);
 	ray->y_step = PXL;
 
-	if (ray->up_dowm = 1)
+	if (ray->up_dowm == 1)
 		ray->y_step *= -1;
 
 	ray->x_step = PXL / tan(ray->ray_angle);
 	if ((ray->right_left == -1 && ray->x_step > 0) ||
 			(ray->right_left == 1 && ray->x_step < 0))
 		ray->x_step *= -1;
-	ray->horz_x = frst_x;
-	ray->horz_y = frst_y;
+	ray->hrz_x = frst_x;
+	ray->hrz_y = frst_y;
 	while ((ray->hrz_x >= 0 && ray->hrz_x <= WIN_WIDTH) &&
 		(ray->hrz_y >= 0 && ray->hrz_y <= WIN_HIGHT))
 	{
-		if (map[floor(ray->hrz_y / PXL)][floor(ray->hrz_x / PXL) + 1] == '1')
+		if (p->map[(int)floor(ray->hrz_y / PXL)][(int)floor(ray->hrz_x / PXL) + 1] == '1')
 			break;
 		else
 		{
 			ray->hrz_x += ray->x_step;
 			ray->hrz_y += ray->y_step;
 		}
-	}
+	} 
 }
 
 void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
@@ -71,14 +70,16 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 	float	frst_x;
 	float	frst_y;
 
-	ray_angl = calc_direction(ray_angl, ray);
-	frst_x = floor(p->ray->x_pos / PXL) * PXL;
+	frst_x = 0;
+	frst_y = 0;
+	ray->ray_angle = calc_direction(ray_angl, ray);
+	frst_x = floor(p->player->x_pos / PXL) * PXL;
 	if (ray->right_left == 1)
 		frst_x += PXL;
 		
-	frst_y = p->ray->y_pos + (frst_x - p->ray->x_pos) * tan(ray->ray_angle);
+	frst_y = p->player->y_pos + (frst_x - p->player->x_pos) * tan(ray->ray_angle);
 	ray->x_step = PXL;
-	if (ray->right_left = -1)
+	if (ray->right_left == -1)
 		ray->x_step *= -1;
 		
 	ray->y_step = PXL * tan(ray->ray_angle);
@@ -90,7 +91,7 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 	while ((ray->ver_x >= 0 && ray->ver_x <= WIN_WIDTH) &&
 		(ray->ver_y >= 0 && ray->ver_y <= WIN_HIGHT))
 	{
-		if (map[floor(ray->ver_y / PXL)][floor(ray->ver_x / PXL) + 1] == '1')
+		if (p->map[(int)floor(ray->ver_y / PXL)][(int)floor(ray->ver_x / PXL) + 1] == '1')
 			break;
 		else
 		{
@@ -105,16 +106,18 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 // 	float	horz_dst;
 // 	float	vert_dst;
 
-// 	horz_dst = sqrt((x1 - x2)(x1 - x2) * (y1 - y2)(y1 - y2));
-// 	vert_dst = sqrt((x1 - x2)(x1 - x2) * (y1 - y2)(y1 - y2));
-// 	if (horz_dst < vert_dst)
-// 	{
+// 	printf("X = %f\n", p->hrz_x);
+// 	printf("Y = %f\n", p->hrz_y);
+	// horz_dst = sqrt((x1 - x2)(x1 - x2) * (y1 - y2)(y1 - y2));
+	// vert_dst = sqrt((x1 - x2)(x1 - x2) * (y1 - y2)(y1 - y2));
+	// if (horz_dst < vert_dst)
+	// {
 		
-// 	}
-// 	else
-// 	{
+	// }
+	// else
+	// {
 		
-// 	}
+	// }
 // }
 
 void	ft_caster(t_cub3d *p)
@@ -125,13 +128,14 @@ void	ft_caster(t_cub3d *p)
 
 	i = 0;
 	p->n_rays = p->win_width / 4;
-	ray_angle = p->wolf->ray_angle - (FOV / 2);
+	ray_angle = p->player->rotat_angle - (FOV / 2);
 	p->rays = malloc(sizeof(t_ray) * p->n_rays);
+		printf("n %d\n", p->n_rays); 
 	while (i < p->n_rays)
 	{
-		ft_cast_horzn(p, p->rays[i], ray_angle);
-        ft_cast_vert(p, p->rays[i], ray_angle);
-		get_distance(p->rays[i]);
+		ft_cast_horz(p, &p->rays[i], ray_angle);
+        ft_cast_vert(p, &p->rays[i], ray_angle);
+		// get_distance(&p->rays[i]);
 		ray_angle += FOV / p->n_rays;
 		++i;
 	}

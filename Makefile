@@ -1,5 +1,5 @@
 SRCS	= cub3d.c ./get_next_line/get_next_line_utils.c ./get_next_line/get_next_line.c ./get_next_line/split.c \
-		move_player.c windows_utils.c 
+		move_player.c windows_utils.c  raycaster.c
 
 OBJ = $(SRCS:.c=.o)
 

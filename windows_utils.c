@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:30 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/24 10:55:18 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/25 13:04:27 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,5 +162,5 @@ void	update_window(t_cub3d *p)
 	y = p->player->y_pos;
 	mlx_clear_window(p->mlx, p->mlx_win);
 	put_images(p);
-	// DDA(p->img, x, y, x + cos(p->player->rotat_angle) * 40, y + sin(p->player->rotat_angle) * 40);
+	DDA(p->img, y, x, y + sin(p->player->rotat_angle) * 40, x + cos(p->player->rotat_angle) * 40);
 }

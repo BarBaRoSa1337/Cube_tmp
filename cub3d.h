@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:24 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/25 09:49:33 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/27 09:47:54 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 #define WIN_WIDTH 300
 #define PI 3.14159
 #define WIN_HIGHT 300
-#define FOV (60 * (PIE / 180.0))
+#define FOV (60 * (PI / 180.0))
 
 typedef struct	s_data {
 	void	*img;
@@ -84,8 +84,9 @@ typedef struct s_player
 	t_cub3d	*parent;
 } t_player;
 
-int	release_key(t_cub3d *p);
-int	game_loop(t_cub3d *p);
+void	ft_caster(t_cub3d *p);
+int		release_key(t_cub3d *p);
+int		game_loop(int keycode, t_cub3d *p);
 float	calc_direction(float angl, t_ray *ray);
 void	update_window(t_cub3d *p);
 void	ft_strlcpy(char *dst, char *src, size_t dstsize);
