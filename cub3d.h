@@ -42,6 +42,8 @@ typedef struct	s_data {
 }				t_data;
 
 typedef struct s_ray {
+	int		found_hrz;
+	int 	found_vrt;
 	int		up_dowm;// 1 for up -1 for down
 	int		right_left;//1 for right -1 for left
 	float	distance;
@@ -85,6 +87,7 @@ typedef struct s_player
 } t_player;
 
 void	ft_caster(t_cub3d *p);
+void DDA(t_data *p, int X0, int Y0, int X1, int Y1);
 int		release_key(t_cub3d *p);
 int		game_loop(int keycode, t_cub3d *p);
 float	calc_direction(float angl, t_ray *ray);
