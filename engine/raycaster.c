@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 10:36:33 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/28 09:39:50 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/28 10:00:58 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	ft_cast_horz(t_cub3d *p, t_ray *ray, float ray_angl)
 
 	frst_x = 0;
 	frst_y = 0;
+	next_x = 0;
+	next_y = 0;
 	ray->ray_angle = calc_direction(ray_angl, ray);
 	frst_y = floor(p->player->y_pos / PXL) * PXL;
 	if (ray->up_dowm == -1)
@@ -69,7 +71,7 @@ void	ft_cast_horz(t_cub3d *p, t_ray *ray, float ray_angl)
 			next_x += ray->x_step;
 			next_y += ray->y_step;
 		}
-	} 
+	}
 }
 
 void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
@@ -81,16 +83,18 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 
 	frst_x = 0;
 	frst_y = 0;
+	next_x = 0;
+	next_y = 0;
 	ray->ray_angle = calc_direction(ray_angl, ray);
 	frst_x = floor(p->player->x_pos / PXL) * PXL;
 	if (ray->right_left == 1)
 		frst_x += PXL;
-		
+
 	frst_y = p->player->y_pos + (frst_x - p->player->x_pos) * tan(ray->ray_angle);
 	ray->x_step = PXL;
 	if (ray->right_left == -1)
 		ray->x_step *= -1;
-		
+
 	ray->y_step = PXL * tan(ray->ray_angle);
 	if ((ray->up_dowm == 1 && ray->y_step > 0) ||
 			(ray->up_dowm == -1 && ray->y_step < 0))
@@ -104,7 +108,7 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 		{
 			ray->ver_x = ray->x_step;
 			ray->ver_y = ray->y_step;
-			// ray->found_vrt = 1;
+			ray->found_vrt = 1;
 			break;
 		}
 		else
@@ -115,15 +119,22 @@ void	ft_cast_vert(t_cub3d *p, t_ray *ray, float ray_angl)
 	} 
 }
 
-void	get_distance(t_ray *p)
+float	calc_dist(float x1, float x2, float y1, float y2)
+{
+	return ((float)sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2) * 1.0));
+}
+
+void	get_distance(t_data *img ,t_player *plr ,t_ray *p)
 {
 	float	horz_dst;
 	float	vert_dst;
 
+	horz_dst = 0;
+	vert_dst = 0;
 	if (p->found_hrz)
-		horz_dst = calc_dist(p->, p->hrz_x, p->, p->hrz_y);
-	else if (p->found_vrt)
-		vert_dst = calc_dist(p-> , p->ver_x, p-> , p->ver_y);
+		horz_dst = calc_dist(plr->x_pos, p->hrz_x, plr->y_pos, p->hrz_y);
+	if (p->found_vrt)
+		vert_dst = calc_dist(plr->x_pos, p->ver_x, plr->y_pos, p->ver_y);
 	if (p->ver_x < p->hrz_x)
 		p->x_step = p->ver_x;
 	else
@@ -133,14 +144,10 @@ void	get_distance(t_ray *p)
 	else
 		p->y_step = p->hrz_y;
 	if (horz_dst < vert_dst)
-	{
 		p->distance = horz_dst;
-	}
 	else
-	{
 		p->distance = vert_dst;
-	}
-	DDA(, player_x, player_y, p->x_step, p->y_step);
+	DDA(img, plr->x_pos, plr->y_pos, p->x_step, p->y_step);
 }
 
 void	ft_caster(t_cub3d *p)
@@ -153,12 +160,11 @@ void	ft_caster(t_cub3d *p)
 	p->n_rays = p->win_width / 4;
 	ray_angle = p->player->rotat_angle - (FOV / 2);
 	p->rays = malloc(sizeof(t_ray) * p->n_rays);
-		printf("n %d\n", p->n_rays); 
 	while (i < p->n_rays)
 	{
 		ft_cast_horz(p, &p->rays[i], ray_angle);
         ft_cast_vert(p, &p->rays[i], ray_angle);
-		// get_distance(&p->rays[i]);
+		get_distance(p->img ,p->player, &p->rays[i]);
 		ray_angle += FOV / p->n_rays;
 		++i;
 	}

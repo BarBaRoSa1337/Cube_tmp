@@ -6,11 +6,11 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:10:48 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/27 12:03:12 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/28 09:47:03 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 void	init_player(t_cub3d *strct, t_player *p)
 {
