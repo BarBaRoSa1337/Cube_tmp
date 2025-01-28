@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:30 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/25 13:04:27 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:47:12 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	*ft_exit(t_cub3d *p)
 void	init_win(t_cub3d *p)
 {
 	p->img = (t_data *)malloc(sizeof(t_data));
-	p->mlx_win = mlx_new_window(p->mlx, (39 * PXL), (16 * PXL),
+	p->mlx_win = mlx_new_window(p->mlx, (WIN_WIDTH), (WIN_HIGHT),
 			"cub3d");
-	p->img->img = mlx_new_image(p->mlx, (39 * PXL), (16 * PXL));
+	p->img->img = mlx_new_image(p->mlx, (WIN_WIDTH), (WIN_HIGHT));
 	p->img->addr = mlx_get_data_addr(p->img->img, &p->img->bits_per_pixel, &p->img->line_length,
 								&p->img->endian);
 	put_images(p);
@@ -63,7 +63,9 @@ char	**get_map(int fd)
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
-
+	
+	if(x < 0 || y < 0 || y > WIN_HIGHT || x > WIN_WIDTH)
+		return;
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
 }
@@ -88,17 +90,22 @@ void	draw_rect(t_data *img, float x, float y, char c)
 		++i;
 	}
 }
-
 void DDA(t_data *p, int X0, int Y0, int X1, int Y1) 
 { 
-    // calculate dx & dy 
+    // Calculate dx & dy 
     int dx = X1 - X0; 
     int dy = Y1 - Y0; 
   
-    // calculate steps required for generating pixels 
+    // Calculate steps required for the line
     int steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy); 
-  
-    // calculate increment in x & y for each steps 
+
+    // Avoid division by zero
+    if (steps == 0) {
+        my_mlx_pixel_put(p, X0, Y0, 0xFAFAFA); // Draw a single point
+        return;
+    }
+
+    // Calculate increment in x & y for each step 
     float Xinc = dx / (float)steps; 
     float Yinc = dy / (float)steps; 
   
@@ -106,13 +113,14 @@ void DDA(t_data *p, int X0, int Y0, int X1, int Y1)
     float X = X0; 
     float Y = Y0; 
     for (int i = 0; i <= steps; i++) { 
-        my_mlx_pixel_put(p ,(int)round(X), (int)round(Y), 
-                 0xFAFAFA); // put pixel at (X,Y) 
-        X += Xinc; // increment in x at each step 
-        Y += Yinc; // increment in y at each step 
+        my_mlx_pixel_put(p, (int)X, (int)Y, 0xFAFAFA); // Put pixel at (X,Y)
+        X += Xinc; // Increment in x at each step 
+        Y += Yinc; // Increment in y at each step
     } 
 }
 
+
+//0xFAFAFA
 void	draw_player(t_cub3d *s)
 {
 	int	i;

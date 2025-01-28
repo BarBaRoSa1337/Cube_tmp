@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:10:48 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/28 09:47:03 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:44:14 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ void	move_player(t_player *p)
 
 	if (check_wall(p->map, x, y))
 	{
+		printf("okld %f\n", p->x_pos);
 		p->x_pos = x;
+		printf("nes %f\n", p->x_pos);
 		p->y_pos = y;
 	}
 }

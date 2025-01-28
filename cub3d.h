@@ -6,7 +6,7 @@
 /*   By: achakour <achakour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:19:24 by achakour          #+#    #+#             */
-/*   Updated: 2025/01/27 09:47:54 by achakour         ###   ########.fr       */
+/*   Updated: 2025/01/28 11:02:44 by achakour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@
 # define Q 113
 #define BUFFER_SIZE 13
 #define PXL 40
-#define WIN_WIDTH 300
+#define WIN_WIDTH 1560
 #define PI 3.14159
-#define WIN_HIGHT 300
+#define WIN_HIGHT 640
 #define FOV (60 * (PI / 180.0))
 
 typedef struct	s_data {
