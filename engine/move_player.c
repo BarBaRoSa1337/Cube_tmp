@@ -12,119 +12,11 @@
 
 #include "../cub3d.h"
 
-// void	init_player(t_cub3d *strct, t_player *p)
-// {
-// 	strct->win_width = 200;
-// 	p->rotat_angle = PI / 2;
-// 	p->turn_speed = 45 * (PI / 2);
-// 	p->move_speed = 10;
-// 	p->up_down = 0;
-// 	p->right_left = 0;
-// 	p->parent = strct;
-// 	p->x_pos =  1 * PXL + (PXL / 2);
-// 	p->y_pos = 1 * PXL + (PXL / 2);
-// }
-
-// int check_wall(char **map ,float x, float y)
-// {
-// 	// if ((x > 0 && x < WIN_WIDTH) && (y > 0 && y < WIN_HIGHT))
-// 	// {
-// 		if (map[(int)floor(x / PXL)][(int)floor(y / PXL)] == '1')
-// 		{
-// 			// printf("ENterd y = %d x = %d map %c\n", (int)floor(y / PXL), (int)floor(x / PXL), map[(int)floor(x / PXL)][(int)floor(y / PXL)]);
-// 			// printf("ENterd\n");//(int)floor(y / PXL), (int)floor(x / PXL)
-// 			return (0);
-// 		}
-// 		// printf("NOT ENterd y = %d x = %d map %c\n", (int)floor(y / PXL), (int)floor(x / PXL), map[(int)floor(x / PXL)][(int)floor(y / PXL)]);
-// 		return (1);
-// 	// }
-// 	// return (0);
-// }
-
-// void	move_player(t_player *p)
-// {
-// 	float	move_step;
-// 	float	x;
-// 	float	y;
-
-// 	p->rotat_angle = remainder(p->rotat_angle, 2 * PI);
-//     if (p->rotat_angle < 0)
-//         p->rotat_angle += 2 * PI;
-// 	p->rotat_angle += p->right_left * p->turn_speed;
-// 	move_step = p->up_down * p->move_speed;
-
-// 	x = p->x_pos + cos(p->rotat_angle) * move_step;
-// 	y = p->y_pos + sin(p->rotat_angle) * move_step;
-
-// 	if (check_wall(p->map, x, y))
-// 	{
-// 		p->x_pos = x;
-// 		p->y_pos = y;
-// 	}
-// }
-
-// void	move_side(t_player *p)
-// {
-// 	float	move_step;
-// 	float	x;
-// 	float	y;
-
-// 	p->rotat_angle = remainder(p->rotat_angle, 2 * PI);
-//     if (p->rotat_angle < 0)
-//         p->rotat_angle += 2 * PI;
-// 	// p->rotat_angle += p->right_left * p->turn_speed;
-// 	move_step = p->right_left * p->move_speed;
-
-// 	x = p->x_pos + cos(p->rotat_angle + PI / 2) * move_step;
-// 	y = p->y_pos + sin(p->rotat_angle + PI / 2) * move_step;
-
-// 	if (check_wall(p->map, x, y))
-// 	{
-// 		p->x_pos = x;
-// 		p->y_pos = y;
-// 	}
-// }
-
-// int	game_loop(int keycode, t_cub3d *p)
-// {
-// 	if (keycode == 65363 || keycode == 65361)
-// 		move_side(p->player);
-// 	else
-// 		move_player(p->player);
-// 	update_window(p);
-// 	ft_caster(p);
-// 	p->player->right_left = 0;
-// 	p->player->up_down = 0;
-// 	return (1);
-// }
-
-// int	select_move(int keycode, t_cub3d *p)
-// {
-// 	if (keycode == ESC)
-// 		ft_exit(p);
-// 	if (keycode == UP || keycode == 65362)
-// 		p->player->up_down = 1;
-// 	else if (keycode == DOWN || keycode == 65364)
-// 		p->player->up_down = -1;
-// 	else if (keycode == RIGHT || keycode == 65363)
-// 		p->player->right_left = -1;
-// 	else if (keycode == LEFT || keycode == 65361)
-// 		p->player->right_left = 1;
-// 	game_loop(keycode, p);
-// 	return (1);
-// }
-
-// // int	release_key(t_cub3d *p)
-// // {
-// // 	p->player->right_left = 0;
-// // 	p->player->up_down = 0;
-// // 	return (1);
-// // }
 void	init_player(t_cub3d *strct, t_player *p)
 {
 	strct->win_width = 200;
 	p->rotat_angle = PI / 2;
-	p->turn_speed = 45 * (PI / 180);  // Fixed degrees to radians
+	p->turn_speed = 45 * (PI / 180);  
 	p->move_speed = 10;
 	p->up_down = 0;
 	p->right_left = 0;
@@ -138,10 +30,8 @@ int check_wall(char **map, float x, float y)
 	int grid_x = (int)floor(x / PXL);
 	int grid_y = (int)floor(y / PXL);
 
-	// Ensure correct indexing (row = y, col = x)
 	if (map[grid_y][grid_x] == '1')
-		return (0);  // Collision detected
-
+		return (0); 
 	return (1);
 }
 
@@ -150,7 +40,6 @@ void	move_player(t_player *p)
 	float move_step;
 	float x, y;
 
-	// Keep rotation angle within [0, 2PI]
 	p->rotat_angle = remainder(p->rotat_angle, 2 * PI);
 	if (p->rotat_angle < 0)
 		p->rotat_angle += 2 * PI;
@@ -159,8 +48,7 @@ void	move_player(t_player *p)
 	x = p->x_pos + cos(p->rotat_angle) * move_step;
 	y = p->y_pos + sin(p->rotat_angle) * move_step;
 
-	// Small buffer to avoid clipping into walls
-	if (check_wall(p->map, x + 5, y + 5))
+	if (check_wall(p->map, x, y))
 	{
 		p->x_pos = x;
 		p->y_pos = y;
@@ -180,8 +68,7 @@ void	move_side(t_player *p)
 	x = p->x_pos + cos(p->rotat_angle + PI / 2) * move_step;
 	y = p->y_pos + sin(p->rotat_angle + PI / 2) * move_step;
 
-	// Small buffer to avoid clipping into walls
-	if (check_wall(p->map, x + 5, y + 5))
+	if (check_wall(p->map, x, y))
 	{
 		p->x_pos = x;
 		p->y_pos = y;
@@ -190,22 +77,19 @@ void	move_side(t_player *p)
 
 void	rotate_player(t_player *p)
 {
-	// Normalize rotation angle
 	p->rotat_angle = remainder(p->rotat_angle, 2 * PI);
 	if (p->rotat_angle < 0)
 		p->rotat_angle += 2 * PI;
 
-	// Apply rotation based on key press
 	p->rotat_angle += p->right_left * p->turn_speed;
 }
 
 int	game_loop(int keycode, t_cub3d *p)
 {
-	// Handle movement and rotation separately
-	if (keycode == 65363 || keycode == 65361) // Left or Right key
+	if (keycode == 65363 || keycode == 65361) 
 		rotate_player(p->player);
 	else if (keycode == RIGHT || keycode == LEFT)
-		move_side(p->player);  // Ensure strafing works
+		move_side(p->player); 
 	else
 		move_player(p->player);
 	
@@ -220,13 +104,11 @@ int	select_move(int keycode, t_cub3d *p)
 	if (keycode == ESC)
 		ft_exit(p);
 
-	// Movement
 	if (keycode == UP || keycode == 65362)
 		p->player->up_down = 1;
 	else if (keycode == DOWN || keycode == 65364)
 		p->player->up_down = -1;
 
-	// Rotation
 	else if (keycode == RIGHT || keycode == 65363)
 		p->player->right_left = -1;
 	else if (keycode == LEFT || keycode == 65361)
