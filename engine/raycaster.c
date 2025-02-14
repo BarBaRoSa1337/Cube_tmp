@@ -109,12 +109,33 @@ void get_distance(t_data *img, t_player *plr, t_ray *ray) {
     DDA(img, plr->x_pos, plr->y_pos, ray->x_step, ray->y_step);
 }
 
+void ft_draw_wall(t_cub3d *p, t_ray *ray, int i)
+{
+    float wall_height = (PXL / ray->distance) * (p->win_width / 2) / tan(FOV / 2);
+    float wall_top = (p->win_height / 2) - (wall_height / 2);
+    float wall_bottom = (p->win_height / 2) + (wall_height / 2);
+
+    int color = 0;
+    if (ray->found_hrz)
+        color = 0x00FF0000;
+    else
+        color = 0x0000FF00;
+
+    for (int y = 0; y < p->win_height; y++) {
+        if (y < wall_top)
+            my_mlx_pixel_put(p->img, i, y, 0x00000000);
+        else if (y >= wall_top && y <= wall_bottom)
+            my_mlx_pixel_put(p->img, i, y, color);
+        else
+            my_mlx_pixel_put(p->img, i, y, 0x00000000);
+    }
+}
+
 void ft_caster(t_cub3d *p) {
     p->n_rays = p->win_width / 4;
     p->rays = malloc(sizeof(t_ray) * p->n_rays);
     if (!p->rays)
         return;
-
     float ray_angle = p->player->rotat_angle - (FOV / 2);
     for (int i = 0; i < p->n_rays; i++) {
         t_ray *ray = &p->rays[i];
@@ -122,6 +143,7 @@ void ft_caster(t_cub3d *p) {
         ft_cast_horz(p, ray, ray_angle);
         ft_cast_vert(p, ray, ray_angle);
         get_distance(p->img, p->player, ray);
+        ft_draw_wall(p, ray, i);
         ray_angle += (FOV / p->n_rays);
     }
 }

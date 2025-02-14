@@ -89,15 +89,15 @@ int	game_loop(int keycode, t_cub3d *p)
 	if (keycode == 65363 || keycode == 65361) 
 		rotate_player(p->player);
 	else if (keycode == RIGHT || keycode == LEFT)
-		move_side(p->player); 
+		move_side(p->player);
 	else
 		move_player(p->player);
 	
 	update_window(p);
 	ft_caster(p);
-
 	return (1);
 }
+
 
 int	select_move(int keycode, t_cub3d *p)
 {

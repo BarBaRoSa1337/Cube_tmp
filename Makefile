@@ -16,7 +16,7 @@ $(NAME):$(OBJ)
 	$(CC) $(CFLAGS) -I/usr/include -Imlx_linux -O3 -c $< -o $@
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -I./minilibx-linux -L./minilibx-linux -lmlx -lm -lX11 -lXext -o $(NAME)
+	$(CC) $(OBJ) -I ./minilibx-linux -L ./minilibx-linux -lmlx -lm -lX11 -lXext -o $(NAME)
 
 clean:
 	$(RM) $(OBJ)
